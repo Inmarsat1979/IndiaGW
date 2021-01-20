@@ -1,0 +1,30 @@
+[Unit]
+Description=India GW SAC Controller
+ConditionPathExists=/home/indiagxtech/ubuntu-vm-1/go-projects/sdn_ctrl/cmd/sac_controller/sac_controller
+After=network.target
+ 
+[Service]
+Type=simple
+User=root
+Group=root
+LimitNOFILE=1024
+
+Restart=on-failure
+RestartSec=10
+startLimitIntervalSec=60
+
+WorkingDirectory=/home/indiagxtech/ubuntu-vm-1/go-projects/sdn_ctrl/cmd/sac_controller
+ExecStart=/home/indiagxtech/ubuntu-vm-1/go-projects/sdn_ctrl/cmd/sac_controller/sac_controller
+ExecStop=/home/indiagxtech/ubuntu-vm-1/go-projects/sdn_ctrl/cmd/sac_controller/stop_sac_controller
+
+# make sure log directory exists and owned by syslog
+PermissionsStartOnly=true
+ExecStartPre=/bin/mkdir -p /var/log/sac_control
+ExecStartPre=/bin/chown root:root /var/log/sac_control
+ExecStartPre=/bin/chmod 755 /var/log/sac_control
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=sac_control
+ 
+[Install]
+WantedBy=multi-user.target
